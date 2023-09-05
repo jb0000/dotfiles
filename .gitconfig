@@ -1,0 +1,54 @@
+[includeIf "gitdir:~/go/src/gitlab.com/junitechnology/"]
+  path = .gitconfig-juni
+[includeIf "gitdir:~/.cfg"]
+  [user]
+    author = "Jorg Bauder"
+    email = "34174944+jb0000@users.noreply.github.com"
+
+
+[alias]
+    a = add
+    b = branch
+    c = commit -a -m
+    cf = commit -a --fixup
+    cc = commit -m
+    ccf = commit --fixup
+    ca = commit -a -C HEAD --amend
+    cap = !git ca && git psf
+    cp = "!f() { git commit -a -m $1 && git push }; f"
+    s = status
+    co = checkout
+    cob = checkout -b
+    d = diff
+    l = log --oneline
+    ll = log
+    pl = pull
+    plr = pull --rebase
+    r = reset
+    rh = reset --hard
+    rb = !git fetch origin master:master && git rebase master
+    rbm = !git fetch origin main:main && git rebase main
+    rbc = -c core.editor=true rebase  --continue
+    rba = rebase --abort
+    ri = rebase -i main --update-refs
+    rim = rebase -i master --update-refs
+    rri = rebase -i --update-refs
+    ps = push
+    psf = push --force-with-lease
+    pss = push -o merge_request.create -o merge_request.draft
+    clbr = "!f() { git for-each-ref --format '%(refname:short)' refs/heads | grep -v 'master|main' | xargs git branch -D }; f"
+    w = worktree
+    wl = worktree list
+    wr = worktree remove
+
+[pull]
+    ff = only
+
+[push]
+    autoSetupRemote = true
+
+[rebase]
+    autosquash = true
+
+[core]
+	excludesfile = %USERPROFILE%.gitignore
