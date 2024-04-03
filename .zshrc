@@ -3,6 +3,9 @@
 # auto cd
 setopt autocd
 
+# vi like command line editing
+setopt vi 
+
 # fast syntzs highlighting:
 source $HOME/.config/zshPlugins/fast-syntax-highlighting/fast-syntax-highlighting.plugin.zsh
 
@@ -26,6 +29,7 @@ bindkey "^[[B" history-beginning-search-forward-end
 export GOPATH=$HOME/go
 export PATH=$PATH:$GOPATH/bin
 export PATH=$PATH:$GOROOT/bin
+export PATH=$PATH:$HOME/.bin
 
 # Mac specific
 if [[ $(uname) == "Darwin" ]]; then
@@ -40,22 +44,30 @@ if [[ $(uname) == "Darwin" ]]; then
 fi
 
 # load work config if exists
-[[ -f "$HOME/.work-cfg" ]] && source "$HOME/.work-cfg"
+[[ -f "$HOME/.zsh-work" ]] && source "$HOME/.zsh-work"
 
 # Aliases
 alias g='git'
+alias gwa='f() { git worktree add -b $1 ~/work/worktree/$2 && cd ~/work/worktree/$2 }; f'
+alias gwar='f() { git worktree add ~/work/worktree/$2 $1 && cd ~/work/worktree/$2 }; f'
+# alias review='f() { git worktree add ~/work/worktree/review/$1 $1 && cd ~/work/worktree/review/$1 && v -c Review }; f'
+alias clone='cloner "/Users/jorg/go/src/gitlab.com"'
 
 alias gl='glab'
 alias glco='glab mr checkout'
 alias gll='glab mr list -a@me'
 alias gllr='glab mr list -r@me'
-alias glv='glab mr view'
+alias glv='glab mr view -c'
 alias glo='glab mr view --web'
 alias glsq='glab mr update --squash-before-merge'
 alias glt='glab mr update -t'
 alias gld='glab mr update -d-'
 alias glr="glab mr update --ready --reviewer $GLABTEAM"
 alias glp='glab ci view'
+alias glma="glab mr approve"
+
+alias doneAllReviews='echo $(date -u "+%Y-%m-%dT%H:%M:%SZ") > ~/.bin/latest; open xbar://app.xbarapp.com/refreshAllPlugins'
+alias doneRevision='echo $(date -u "+%Y-%m-%dT%H:%M:%SZ") > ~/.bin/latest-mine; open xbar://app.xbarapp.com/refreshAllPlugins'
 
 alias pss='git pss && glsq && gld && glp'
 
@@ -65,7 +77,11 @@ alias gol='golangci-lint run --print-issued-lines=false --max-issues-per-linter=
 
 alias vi='nvim'
 alias v='nvim'
+alias vv='nvim `fzf`'
 
+alias c='cd $(find . -type d -print | fzf)'
+
+alias x='xargs '
 alias al='aws sso login --profile '
 
 alias jsonFormat="pbpaste | jq . | pbcopy"
@@ -78,7 +94,7 @@ alias config='git --git-dir=$HOME/.cfg/ --work-tree=$HOME'
 
 # remove user and computer name from shell
 PS1="%F{112}%1~%f\$vcs_info_msg_0_ "
-
+#%F{112}%1~
 # add git branch
 autoload -Uz vcs_info
 precmd_vcs_info() { vcs_info }
@@ -88,3 +104,4 @@ setopt prompt_subst
 zstyle ':vcs_info:git:*' formats ' %F{7}%F{208}%b%F{7}%f'
 zstyle ':vcs_info:*' enable git
 
+eval "$(atuin init zsh --disable-up-arrow)"

@@ -43,8 +43,11 @@ return require('packer').startup(function(use)
         'nvim-treesitter/nvim-treesitter',
         run = ':TSUpdate'
     }
-
     use 'romainl/vim-cool'
     
     use  'github/copilot.vim'
+    use {
+        'CopilotC-Nvim/CopilotChat.nvim',
+        branch = 'canary'
+    }
 end)
