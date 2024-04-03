@@ -1,11 +1,25 @@
 local opts = { noremap = true }
 
 -- EXPERIMENTAL
+function ReviewFu()
+  vim.api.nvim_command('let g:gitgutter_diff_base = "main"')
+  vim.api.nvim_command('GitGutterQuickFix')
+  vim.api.nvim_command('cfirst')
+  vim.api.nvim_command('vsplit')
+  vim.api.nvim_command('term g d main')
+  vim.api.nvim_command('vsplit')
+  vim.api.nvim_command('term glv')
+  vim.api.nvim_command('winc h')
+  vim.api.nvim_command('norm! A')
+end
+
 vim.api.nvim_set_keymap('n', '<C-w>', '<C-W>x', opts)
 vim.api.nvim_set_keymap('n', '<Leader>u', ':GitGutterUndoHunk<CR>', opts)
 vim.api.nvim_create_user_command('ReviewM', 'let g:gitgutter_diff_base = "master" | GitGutterQuickFix', {})
-vim.api.nvim_create_user_command('Review', 'let g:gitgutter_diff_base = "main" | GitGutterQuickFix', {})
+vim.api.nvim_create_user_command('Review', 'lua ReviewFu()', {})
 vim.api.nvim_create_user_command('Diff', 'GitGutterDiffOrig', {})
+vim.api.nvim_set_keymap('n', '<Leader>P', ':GitGutterDiffOrig<CR>', opts)
+vim.api.nvim_create_user_command('Path', 'let @+ = expand(\'%\')', {})
 
 -- Paste yank buffer over a given movement
 -- https://www.vikasraj.dev/blog/vim-dot-repeat
@@ -40,8 +54,7 @@ vim.api.nvim_set_keymap('t', '<Leader>q', '<C-\\><C-n>:q<CR>', opts)
 vim.api.nvim_set_keymap('n', '<Leader>a', ':qa<CR>', opts)
 
 -- normal mode
-vim.api.nvim_set_keymap('i', 'jk',        '<ESC>l', opts)
-vim.api.nvim_set_keymap('t', 'jk',        '<C-\\><C-n>', opts)
+vim.api.nvim_set_keymap('t', '<Esc>',        '<C-\\><C-n>', opts)
 
 -- open terminal
 vim.api.nvim_set_keymap('n', '<Leader>.', ':vsplit | term<CR>i', opts)

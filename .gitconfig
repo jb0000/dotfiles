@@ -1,9 +1,17 @@
-[includeIf "gitdir:~/go/src/gitlab.com/junitechnology/"]
-  path = .gitconfig-juni
 [includeIf "gitdir:~/.cfg"]
-  [user]
-    author = "Jorg Bauder"
-    email = "34174944+jb0000@users.noreply.github.com"
+    [user]
+        author = "Jorg Bauder"
+        email = "34174944+jb0000@users.noreply.github.com"
+    [status]
+        showUntrackedFiles = no
+[includeIf "gitdir:~/.cfg-work"]
+    path = .gitconfig-juni
+    [status]
+        showUntrackedFiles = no
+[includeIf "gitdir:~/go/src/gitlab.com/junitechnology/"]
+    path = .gitconfig-juni
+    [status]
+        showUntrackedFiles = all
 
 
 [alias]
@@ -15,6 +23,8 @@
     ccf = commit --fixup
     ca = commit -a -C HEAD --amend
     cap = !git ca && git psf
+    cca = commit -C HEAD --amend
+    ccap = !git cca && git psf
     cp = "!f() { git commit -a -m $1 && git push }; f"
     s = status
     co = checkout
@@ -26,8 +36,8 @@
     plr = pull --rebase
     r = reset
     rh = reset --hard
-    rb = !git fetch origin master:master && git rebase master
-    rbm = !git fetch origin main:main && git rebase main
+    rb = !git fetch origin master:master --update-head-ok && git rebase master
+    rbm = !git fetch origin main:main --update-head-ok && git rebase main
     rbc = -c core.editor=true rebase  --continue
     rba = rebase --abort
     ri = rebase -i main --update-refs
@@ -38,8 +48,11 @@
     pss = push -o merge_request.create -o merge_request.draft
     clbr = "!f() { git for-each-ref --format '%(refname:short)' refs/heads | grep -v 'master|main' | xargs git branch -D }; f"
     w = worktree
+    wa = "!f() { git worktree add -b $1 ../$2; }; f"
+    war = "!f() { git worktree add ../$2 $1; }; f"
     wl = worktree list
     wr = worktree remove
+    wp = worktree prune
 
 [pull]
     ff = only
@@ -52,3 +65,6 @@
 
 [core]
 	excludesfile = %USERPROFILE%.gitignore
+
+[diff]
+        external = difft
